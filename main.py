@@ -126,7 +126,7 @@ def login():
     return jsonify({'status':401,"msg":'could wrong credentials'}),401
 
     
-@app.post("/api/sensor_data")
+@app.route("/api/sensor_data",methods=['POST'])
 def sensor_Data():
     data=request.get_json()
     height=data["height"]
