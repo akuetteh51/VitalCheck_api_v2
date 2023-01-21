@@ -78,7 +78,7 @@ class Appointment(db.Model):
 
 
 
-@app.route('/',mehods=['GET'])
+@app.route('/',methods=['GET'])
 def index():
     return jsonify({"Choo Choo": "Welcome to your Flask app 🚅"})
 
