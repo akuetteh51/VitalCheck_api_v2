@@ -240,7 +240,7 @@ def sensorData(user_id):
         return jsonify({'status':200,"SensorData": SensorData[-1]}),200
     except:
         
-        return jsonify({'status':200,"SensorData": "no Data found"}),204
+        return jsonify({'status':204,"SensorData": "no Data found"}),200
     
 
 
