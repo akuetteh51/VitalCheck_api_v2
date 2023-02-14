@@ -18,12 +18,17 @@ db=SQLAlchemy(app)
 class User(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     public_id=db.Column(db.String(50),unique=True)
+    photo=db.Column(db.String(80))
     name=db.Column(db.String(50))
     password=db.Column(db.String(80))
     email=db.Column(db.String(80),unique=True)
     admin=db.Column(db.Boolean)
     sensor=db.relationship('Sensor',backref='user',uselist=False)
-   
+    sensor=db.relationship('Doctor',backref='user',uselist=False)
+    sensor=db.relationship('Patient',backref='user',uselist=False)
+    sensor=db.relationship('Appointment',backref='user',uselist=False)
+
+
 
     def __init__(self,public_id,name,password,email,admin):
         self.public_id=public_id
@@ -39,6 +44,9 @@ class Sensor(db.Model):
     weight=db.Column(db.Float)
     Bmp=db.Column(db.Float)
     Temp=db.Column(db.Float)
+
+
+
     def __init__(self,Height,weight,Bmp,Temp,user_id):
         self.Height=Height
         self.weight=weight
@@ -49,26 +57,58 @@ class Sensor(db.Model):
 
 class Doctor(db.Model):
     id=db.Column(db.Integer,primary_key=True)
-    field=db.Column(db.String(50))
-  
+    user_id=db.Column(db.String(50),db.ForeignKey('user.public_id'))
+    message=db.Column(db.String(50))
+
+    def __init__(self,user_id,message) :
+        self.user_id=user_id
+        self.message=message
+
 
 
 class Nurse(db.Model):
     id=db.Column(db.Integer,primary_key=True)
-    name=db.Column(db.String(50))
-    Nurse_id=db.Column(db.String(50),unique=True)
-   
+    user_id=db.Column(db.String(50),db.ForeignKey('user.public_id'))
+    message=db.Column(db.String(100))
+
+
+    def __init__(self,user_id,message) :
+        self.user_id=user_id
+        self.message=message
+    
+
+
 
 class Patient(db.Model):
     id=db.Column(db.Integer,primary_key=True)
-    name=db.Column(db.String(50))
-    Patient_id=db.Column(db.String(50),unique=True)
- 
+    user_id=db.Column(db.String(50),db.ForeignKey('user.public_id'))
+    message=db.Column(db.String(100))
+
+    def __init__(self,user_id,message) :
+        self.user_id=user_id
+        self.message=message
+
 
 class Appointment(db.Model):
     id=db.Column(db.Integer,primary_key=True)
+    user_id=db.Column(db.String(50),db.ForeignKey('user.public_id'))
     date=db.Column(db.String(50))
     description=db.Column(db.String(50))
+
+    def __init__(self,user_id,date,description) :
+        self.user_id=user_id
+        self.date=date
+        self.description=description
+
+class Message(db.Model):
+    id=db.Column(db.Integer,primary_key=True)
+    user_id=db.Column(db.String(50),db.ForeignKey('user.public_id'))
+    message=db.Column(db.String(100))
+
+
+
+
+
 
 @app.route('/',methods=['GET'])
 def index():
@@ -242,7 +282,92 @@ def sensorData(user_id):
         
         return jsonify({'status':204,"SensorData": "no Data found"}),200
     
+@app.route('/api/chat_patient',methods=['POST'])
+def message():
+    data=request.get_json()
+    user_id=data["user_id"]
+    message=data["message"]
+    
+    new_data=Patient(user_id=user_id,message=message)
+    db.session.add(new_data)
+    db.session.commit()
+    try:
+        return jsonify({'status':200,"msg": "sent"}),200
+    except:
+        
+        return jsonify({'status':204,"msg": "Data not sent"}),200
 
+
+
+
+@app.route('/api/chat_patient/<user_id>',methods=['GET'])
+def message_patient(user_id):
+    
+    
+    new_data=Patient.query.filter_by(user_id=user_id).first()
+    if not new_data:
+        return jsonify({"msg":"No data"}),204
+
+   
+   
+   
+    # print(userData)
+    try:
+        return jsonify({'status':200,"msg": new_data.message}),200
+    except:
+        
+        return jsonify({'status':204,"msg": "Data not sent"}),200
+
+
+@app.route('/api/chat_nurse',methods=['POST'])
+def message_nurse():
+    data=request.get_json()
+    user_id=data["user_id"]
+    message=data["message"]
+    
+    new_data=Message(user_id=user_id,message=message)
+    db.session.add(new_data)
+    db.session.commit()
+    try:
+        return jsonify({'status':200,"msg": new_data}),200
+    except:
+        
+        return jsonify({'status':204,"msg": "Data not sent"}),200
+
+
+
+@app.route('/api/chat_nurse/<user_id>',methods=['GET'])
+def nurse_message(user_id):
+    
+    
+    new_data=Message.query.filter_by(user_id=user_id)
+    print(new_data)
+    
+    try:
+        return jsonify([{'status':200,"user_id':m.user_id,msg": m.message}for m in new_data]),200
+    except:
+        
+        return jsonify({'status':204,"msg": "Data not sent"}),200
+
+
+@app.route('/api/appointment',methods=['POST'])
+def bookAppointment():
+    data=request.get_json()
+    user_id=data['user_id']
+    date=datetime.datetime.utcnow
+    description=data['description']
+    appointment=Appointment(user_id=user_id,date=date,description=description)
+    db.session.add(appointment)
+    db.session.commit()
+# app.app_context().push()
+#open sqlite with sqlite3 db.sqlite    # data1=[data.id,data.Temp,data.weight,data.Bmp,data.Height]
+
+# {"data":{"temperature": data[1],"weight":data[2],"BMP":data[3],"height":data[4]}},200
+    # print('------------------------------------------------------')
+    # print(tuple([data.id,data.Temp,data.weight,data.Bmp,data.Height]))
+    # print('------------------------------------------------------')
+#check table with .tables
+# testAdmin@g.com 
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
