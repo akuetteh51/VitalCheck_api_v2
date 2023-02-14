@@ -8,5 +8,5 @@ Werkzeug==1.0.1
 python-dotenv
 psycopg2-binary
 flask-bcrypt
-flask-sqlalchemy
+flask-sqlalchemy==3.0.2
 Pyjwt
