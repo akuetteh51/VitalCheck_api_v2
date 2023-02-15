@@ -342,7 +342,7 @@ def nurse_message(user_id):
     
     
     new_data=Message.query.filter_by(user_id=user_id)
-     if not new_data:
+    if not new_data:
         return jsonify({"msg":"No data"}),204
     
     try:
