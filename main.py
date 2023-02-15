@@ -306,15 +306,10 @@ def message_patient(user_id):
     
     
     new_data=Patient.query.filter_by(user_id=user_id).first()
-    if not new_data:
-        return jsonify({"msg":"No data"}),204
-
-   
-   
-   
-    # print(userData)
-    try:
-        return jsonify({'status':200,"msg": new_data.message}),200
+    for data in new_data:
+        
+        try:
+            return jsonify([{'status':200,"user_id":m.user_id,"msg": m.message}for m in new_data]),200
     except:
         
         return jsonify({'status':204,"msg": "Data not sent"}),200
@@ -343,11 +338,10 @@ def nurse_message(user_id):
     
     new_data=Message.query.filter_by(user_id=user_id)
     print(new_data)
-    if not new_data:
-        return jsonify({"msg":"No data"}),204
-    
-    try:
-        return jsonify({'status':200,"user_id":new_data.user_id,"msg":new_data.message} ),200
+    for data in new_data:
+        
+        try:
+            return jsonify([{'status':200,"user_id":m.user_id,"msg": m.message}for m in new_data]),200
     except:
         
         return jsonify({'status':204,"msg":"No data"}),200
