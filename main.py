@@ -306,12 +306,13 @@ def message_patient(user_id):
     
     
     new_data=Patient.query.filter_by(user_id=user_id).first()
-    for data in new_data:
+   
         
-        try:
+    try:
+        for data in new_data:
             return jsonify([{'status':200,"user_id":m.user_id,"msg": m.message}for m in new_data]),200
     except:
-        
+
         return jsonify({'status':204,"msg": "Data not sent"}),200
 
 
@@ -337,10 +338,9 @@ def nurse_message(user_id):
     
     
     new_data=Message.query.filter_by(user_id=user_id)
-    print(new_data)
-    for data in new_data:
         
-        try:
+    try:
+        for data in new_data:
             return jsonify([{'status':200,"user_id":m.user_id,"msg": m.message}for m in new_data]),200
     except:
         
