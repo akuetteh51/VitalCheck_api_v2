@@ -342,14 +342,14 @@ def nurse_message(user_id):
     
     
     new_data=Message.query.filter_by(user_id=user_id)
-    for m in new_data:
-        print( m)
+     if not new_data:
+        return jsonify({"msg":"No data"}),204
     
     try:
-        return jsonify({'status':200,"user_id":"m.user_id","msg":" m.message"} ),200
+        return jsonify({'status':200,"user_id":new_data.user_id,"msg":new_data.message} ),200
     except:
         
-        return jsonify({'status':204,"msg": "Data not sent"}),200
+        return jsonify({'status':204,"msg":"No data"}),200
 
 
 @app.route('/api/appointment',methods=['POST'])
