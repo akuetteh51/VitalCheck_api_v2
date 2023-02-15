@@ -310,7 +310,7 @@ def message_patient(user_id):
         
     try:
         for data in new_data:
-            return jsonify([{'status':200,"user_id":m.user_id,"msg": m.message}for m in new_data]),200
+            return jsonify({'status':200,"user_id":data.user_id,"msg": data.message}),200
     except:
 
         return jsonify({'status':204,"msg": "Data not sent"}),200
@@ -341,7 +341,7 @@ def nurse_message(user_id):
         
     try:
         for data in new_data:
-            return jsonify([{'status':200,"user_id":m.user_id,"msg": m.message}for m in new_data]),200
+            return jsonify({'status':200,"user_id":data.user_id,"msg": data.message}),200
     except:
         
         return jsonify({'status':204,"msg":"No data"}),200
