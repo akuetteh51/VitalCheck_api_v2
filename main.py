@@ -342,10 +342,11 @@ def nurse_message(user_id):
     
     
     new_data=Message.query.filter_by(user_id=user_id)
-    print(new_data)
+    for m in new_data:
+        print( m)
     
     try:
-        return jsonify({'status':200,"user_id":m.user_id,"msg": m.message} for m in new_data),200
+        return jsonify({'status':200,"user_id":"m.user_id","msg":" m.message"} ),200
     except:
         
         return jsonify({'status':204,"msg": "Data not sent"}),200
