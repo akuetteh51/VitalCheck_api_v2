@@ -1,4 +1,5 @@
 from flask import Flask,request,jsonify
+from flask_cors import CORS
 import datetime
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash,generate_password_hash
@@ -11,7 +12,7 @@ basedir=os.path.abspath(os.path.dirname(__file__))
 app.config['SECRET_KEY']='THEPASSCODE1'
 app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///'+os.path.join(basedir,'db.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
-
+CORS(app)
 db=SQLAlchemy(app)
 
 
