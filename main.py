@@ -310,7 +310,7 @@ def message_patient(user_id):
         
     try:
         for data in new_data:
-            return jsonify({'status':200,"user_id":data.user_id,"msg": data.message}),200
+            return jsonify({'status':200,"user_id":user_id,"msg": data.message}),200
     except:
 
         return jsonify({'status':204,"msg": "Data not sent"}),200
