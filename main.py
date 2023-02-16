@@ -326,7 +326,7 @@ def message_nurse():
     db.session.add(new_data)
     db.session.commit()
     try:
-        return jsonify({'status':200,"msg": new_data}),200
+        return jsonify({'status':200,"msg": "message sent"}),200
     except:
         
         return jsonify({'status':204,"msg": "Data not sent"}),200
