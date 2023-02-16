@@ -340,7 +340,7 @@ def nurse_message(user_id):
     new_data=Message.query.filter_by(user_id=user_id)
     messages= {data.id:data.message for data in new_data}  
     try:
-        return jsonify({'status':200,"user_id":data.user_id,"msg": messages}),200
+        return jsonify({'status':200,"user_id":user_id,"msg": messages}),200
     except:
         
         return jsonify({'status':204,"msg":"No data"}),200
