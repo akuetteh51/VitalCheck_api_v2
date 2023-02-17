@@ -104,7 +104,15 @@ class Appointment(db.Model):
 class Message(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     user_id=db.Column(db.String(50),db.ForeignKey('user.public_id'))
+    date=db.Column(db.String(50))
     message=db.Column(db.String(100))
+
+    def __init__(self,user_id,date,message):
+        
+        self.user_id=user_id
+        self.date=date
+        self.message=message
+        
 
 
 
@@ -318,11 +326,13 @@ def message_patient(user_id):
 
 @app.route('/api/chat_nurse',methods=['POST'])
 def message_nurse():
+    print("hello world")
     data=request.get_json()
     user_id=data["user_id"]
+    date=data["date"]
     message=data["message"]
     
-    new_data=Message(user_id=user_id,message=message)
+    new_data=Message(user_id=user_id,date=date,message=message)
     db.session.add(new_data)
     db.session.commit()
     try:
@@ -340,8 +350,9 @@ def nurse_message(user_id):
     new_data=Message.query.filter_by(user_id=user_id)
     for data in new_data:
         message=data.message
+        date=data.date
     try:
-        return jsonify({'status':200,"user_id":user_id,"msg": message}),200
+        return jsonify({'status':200,"user_id":user_id,"date":date,"msg": message}),200
     except:
         
         return jsonify({'status':204,"msg":"No data"}),200
