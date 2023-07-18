@@ -377,6 +377,6 @@ def bookAppointment():
 #check table with .tables
 # testAdmin@g.com 
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0",debug=False)
+# if __name__ == '__main__':
+#     app.run(host="0.0.0.0",debug=False)
 #app.run(debug=True, port=os.getenv("PORT", default=5000))
